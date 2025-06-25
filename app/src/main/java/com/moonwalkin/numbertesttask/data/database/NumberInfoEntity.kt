@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
 @Entity(tableName = "numberInfo")
-data class NumberInfoEntity(
+class NumberInfoEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val text: String,
