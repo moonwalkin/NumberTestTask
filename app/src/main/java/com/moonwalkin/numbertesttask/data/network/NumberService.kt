@@ -1,6 +1,5 @@
 package com.moonwalkin.numbertesttask.data.network
 
-import com.moonwalkin.numbertesttask.data.NumberInfo
 import retrofit2.http.GET
 import retrofit2.http.Path
 
