@@ -2,7 +2,7 @@ package com.moonwalkin.numbertesttask.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
+import com.moonwalkin.numbertesttask.domain.NumberInfo
 
 @Entity(tableName = "numberInfo")
 class NumberInfoEntity(
@@ -11,3 +11,17 @@ class NumberInfoEntity(
     val text: String,
     val number: Int
 )
+
+fun NumberInfoEntity.toDomain(): NumberInfo {
+    return NumberInfo(
+        text = text,
+        number = number
+    )
+}
+
+fun NumberInfo.toEntity(): NumberInfoEntity {
+    return NumberInfoEntity(
+        text = text,
+        number = number
+    )
+}

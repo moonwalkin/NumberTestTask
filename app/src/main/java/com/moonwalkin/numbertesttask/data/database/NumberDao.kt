@@ -12,4 +12,7 @@ interface NumberDao {
 
      @Query("SELECT * FROM numberInfo")
      suspend fun getSearchHistory(): List<NumberInfoEntity>
+
+     @Query("SELECT * FROM numberInfo WHERE number = :number")
+     suspend fun getNumberInfo(number: Int): NumberInfoEntity?
 }
