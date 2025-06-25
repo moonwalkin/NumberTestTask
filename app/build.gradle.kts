@@ -12,6 +12,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
+        buildConfigField("String", "BASE_URL", "\"http://numbersapi.com/\"")
         applicationId = "com.moonwalkin.numbertesttask"
         minSdk = 24
         targetSdk = 34
@@ -39,6 +40,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
