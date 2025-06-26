@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -59,6 +61,7 @@ private fun HomeScreenContent(
 ) {
     val context = LocalContext.current
     var text by rememberSaveable { mutableStateOf("") }
+    val listState = rememberLazyListState()
 
     LaunchedEffect(state.error) {
         if (state.error != null) {
@@ -70,7 +73,13 @@ private fun HomeScreenContent(
         }
     }
 
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
+    LaunchedEffect(state.history) {
+        if (state.history.isNotEmpty()) {
+            listState.scrollToItem(0)
+        }
+    }
+
+    Box(modifier = modifier) {
         Column {
             Text(text = state.numberInfo)
             OutlinedTextField(
@@ -96,20 +105,28 @@ private fun HomeScreenContent(
             ) {
                 Text(text = stringResource(R.string.get_fact_about_random_number))
             }
-
-            LazyColumn(contentPadding = PaddingValues(8.dp)) {
-                items(items = state.history, key = { it.id }) { numberInfo ->
-                    Text(
-                        text = "${numberInfo.number} — ${numberInfo.text}",
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                }
-            }
+            HistoryItems(listState, state)
         }
         if (state.isLoading) {
-            CircularProgressIndicator()
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
+    }
+}
+
+@Composable
+private fun HistoryItems(
+    lazyListState: LazyListState,
+    state: HomeViewModel.HomeScreenState,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier, state = lazyListState, contentPadding = PaddingValues(8.dp)) {
+        items(items = state.history, key = { it.id }) { numberInfo ->
+            Text(
+                text = "${numberInfo.number} — ${numberInfo.text}",
+                modifier = Modifier.padding(vertical = 4.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }
