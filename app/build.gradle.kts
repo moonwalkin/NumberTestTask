@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi.converter)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.kotlinx.coroutines.test)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
 

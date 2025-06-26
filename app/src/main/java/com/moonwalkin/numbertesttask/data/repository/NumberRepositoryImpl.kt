@@ -30,7 +30,7 @@ class NumberRepositoryImpl @Inject constructor(
                 Result.success(entities.map(NumberInfoEntity::toDomain))
             }
             .catch {
-                Result.failure<Exception>(it)
+                emit(Result.failure(it))
             }
     }
 

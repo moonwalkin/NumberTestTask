@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.moonwalkin.numbertesttask.domain.NumberInfo
 
 @Entity(tableName = "numberInfo")
-class NumberInfoEntity(
+data class NumberInfoEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val text: String,

@@ -4,7 +4,7 @@ import com.moonwalkin.numbertesttask.data.database.NumberInfoEntity
 import com.moonwalkin.numbertesttask.domain.NumberInfo
 import com.squareup.moshi.Json
 
-class NumberInfoDto(
+data class NumberInfoDto(
     @Json(name = "text") val text: String,
     @Json(name = "number") val number: Long
 )
