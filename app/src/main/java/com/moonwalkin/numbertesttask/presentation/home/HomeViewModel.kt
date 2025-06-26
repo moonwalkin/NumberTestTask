@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask.presentation
+package com.moonwalkin.numbertesttask.presentation.home
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask.presentation
+package com.moonwalkin.numbertesttask.presentation.home
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
