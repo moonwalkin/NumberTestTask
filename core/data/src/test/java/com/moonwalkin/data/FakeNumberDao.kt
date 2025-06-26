@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask
+package com.moonwalkin.data
 
 import com.moonwalkin.data.database.NumberDao
 import com.moonwalkin.data.database.NumberInfoEntity

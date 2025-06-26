@@ -4,7 +4,7 @@ import com.moonwalkin.domain.GetNumberInfoUseCase
 import com.moonwalkin.domain.GetNumbersHistoryUseCase
 import com.moonwalkin.domain.GetRandomNumberUseCase
 import com.moonwalkin.domain.NumberInfo
-import com.moonwalkin.numbertesttask.presentation.home.HomeViewModel
+import com.moonwalkin.home.HomeViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertNull

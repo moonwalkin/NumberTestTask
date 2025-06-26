@@ -42,6 +42,7 @@ dependencies {
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
     implementation(libs.javax.inject)
+    implementation(libs.kotlinx.coroutines.test)
 
     implementation(projects.core.domain)
     implementation(libs.androidx.core.ktx)
