@@ -1,7 +1,6 @@
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
-    alias(libs.plugins.ksp)
 }
 
 java {
@@ -17,6 +16,5 @@ kotlin {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
-    ksp(libs.kotlin.inject.compiler.ksp)
-    implementation(libs.kotlin.inject.runtime)
+    implementation(libs.javax.inject)
 }

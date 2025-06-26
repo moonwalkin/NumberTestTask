@@ -2,11 +2,14 @@ package com.moonwalkin.numbertesttask.di
 
 import android.content.Context
 import androidx.room.Room
+import com.moonwalkin.data.database.NumberDatabase
+import com.moonwalkin.data.network.NumberService
+import com.moonwalkin.data.repository.NumberRepositoryImpl
+import com.moonwalkin.domain.DefaultDispatcher
+import com.moonwalkin.domain.IoDispatcher
+import com.moonwalkin.domain.MainDispatcher
+import com.moonwalkin.domain.NumberRepository
 import com.moonwalkin.numbertesttask.BuildConfig
-import com.moonwalkin.numbertesttask.data.database.NumberDatabase
-import com.moonwalkin.numbertesttask.data.network.NumberService
-import com.moonwalkin.numbertesttask.data.repository.NumberRepositoryImpl
-import com.moonwalkin.numbertesttask.domain.NumberRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -78,5 +81,4 @@ class DataModule {
     @Provides
     @MainDispatcher
     fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
-
 }

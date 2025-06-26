@@ -41,7 +41,7 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
-    implementation(libs.kotlin.inject.runtime)
+    implementation(libs.javax.inject)
 
     implementation(projects.core.domain)
     implementation(libs.androidx.core.ktx)

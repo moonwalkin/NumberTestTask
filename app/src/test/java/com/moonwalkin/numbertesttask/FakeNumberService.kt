@@ -1,7 +1,8 @@
 package com.moonwalkin.numbertesttask
 
-import com.moonwalkin.numbertesttask.data.network.NumberInfoDto
-import com.moonwalkin.numbertesttask.data.network.NumberService
+import com.moonwalkin.data.network.NumberInfoDto
+import com.moonwalkin.data.network.NumberService
+
 
 class FakeNumberService : NumberService {
     val numberResponses = mutableMapOf<Long, NumberInfoDto>()

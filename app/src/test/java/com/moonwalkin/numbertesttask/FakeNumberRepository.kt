@@ -1,7 +1,7 @@
 package com.moonwalkin.numbertesttask
 
-import com.moonwalkin.numbertesttask.domain.NumberInfo
-import com.moonwalkin.numbertesttask.domain.NumberRepository
+import com.moonwalkin.domain.NumberInfo
+import com.moonwalkin.domain.NumberRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

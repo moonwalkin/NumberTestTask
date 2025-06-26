@@ -45,6 +45,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+
     implementation(libs.retrofit)
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

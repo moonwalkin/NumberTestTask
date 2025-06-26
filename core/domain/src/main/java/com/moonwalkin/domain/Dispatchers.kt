@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask.di
+package com.moonwalkin.domain
 
 import javax.inject.Qualifier
 

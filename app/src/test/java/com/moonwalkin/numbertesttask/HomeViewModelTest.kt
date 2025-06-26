@@ -1,9 +1,9 @@
 package com.moonwalkin.numbertesttask
 
-import com.moonwalkin.numbertesttask.domain.GetNumberInfoUseCase
-import com.moonwalkin.numbertesttask.domain.GetNumbersHistoryUseCase
-import com.moonwalkin.numbertesttask.domain.GetRandomNumberUseCase
-import com.moonwalkin.numbertesttask.domain.NumberInfo
+import com.moonwalkin.domain.GetNumberInfoUseCase
+import com.moonwalkin.domain.GetNumbersHistoryUseCase
+import com.moonwalkin.domain.GetRandomNumberUseCase
+import com.moonwalkin.domain.NumberInfo
 import com.moonwalkin.numbertesttask.presentation.home.HomeViewModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertFalse

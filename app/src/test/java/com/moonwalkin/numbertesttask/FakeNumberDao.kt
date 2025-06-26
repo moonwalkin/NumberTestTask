@@ -1,7 +1,7 @@
 package com.moonwalkin.numbertesttask
 
-import com.moonwalkin.numbertesttask.data.database.NumberDao
-import com.moonwalkin.numbertesttask.data.database.NumberInfoEntity
+import com.moonwalkin.data.database.NumberDao
+import com.moonwalkin.data.database.NumberInfoEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

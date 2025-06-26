@@ -1,4 +1,4 @@
-package com.moonwalkin.data
+package com.moonwalkin.home
 
 import org.junit.Test
 

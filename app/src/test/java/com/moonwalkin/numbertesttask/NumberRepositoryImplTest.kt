@@ -1,13 +1,13 @@
 package com.moonwalkin.numbertesttask
 
-import com.moonwalkin.numbertesttask.data.database.toEntity
-import com.moonwalkin.numbertesttask.data.network.NumberInfoDto
-import com.moonwalkin.numbertesttask.data.network.NumberService
-import com.moonwalkin.numbertesttask.data.network.toDomain
-import com.moonwalkin.numbertesttask.data.network.toEntity
-import com.moonwalkin.numbertesttask.data.repository.NumberRepositoryImpl
-import com.moonwalkin.numbertesttask.domain.NumberInfo
-import com.moonwalkin.numbertesttask.domain.NumberRepository
+import com.moonwalkin.data.database.toEntity
+import com.moonwalkin.data.network.NumberInfoDto
+import com.moonwalkin.data.network.NumberService
+import com.moonwalkin.data.network.toDomain
+import com.moonwalkin.data.network.toEntity
+import com.moonwalkin.data.repository.NumberRepositoryImpl
+import com.moonwalkin.domain.NumberInfo
+import com.moonwalkin.domain.NumberRepository
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
