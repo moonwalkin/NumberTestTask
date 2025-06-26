@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.data)
     implementation(projects.feature.home)
+    implementation(projects.feature.details)
 
     implementation(libs.retrofit)
     implementation(libs.room.runtime)

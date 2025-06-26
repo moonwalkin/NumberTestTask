@@ -6,8 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.moonwalkin.details.NumberDetailsScreen
 import com.moonwalkin.home.HomeScreen
-import com.moonwalkin.numbertesttask.presentation.details.NumberDetailsScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
