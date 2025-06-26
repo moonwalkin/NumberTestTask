@@ -12,41 +12,32 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.CancellationException
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class NumberRepositoryImplTest {
 
     private lateinit var fakeDao: FakeNumberDao
     private lateinit var fakeService: FakeNumberService
     private lateinit var repository: NumberRepository
-    private val testDispatcher = StandardTestDispatcher()
+
+    private val testScheduler = TestCoroutineScheduler()
+    private val testDispatcher = StandardTestDispatcher(testScheduler)
 
     @Before
     fun setup() {
         fakeDao = FakeNumberDao()
         fakeService = FakeNumberService()
         repository = NumberRepositoryImpl(fakeDao, fakeService, testDispatcher)
-        Dispatchers.setMain(testDispatcher)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test
-    fun `getNumbersHistory returns previously saved items`() = runTest {
+    fun `getNumbersHistory returns previously saved items`() = runTest(testScheduler) {
         val domain = NumberInfo(1, "One", 2)
         fakeDao.insertNumberInfo(domain.toEntity())
 
@@ -56,7 +47,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getNumberInfo fetches from service and stores in dao`() = runTest {
+    fun `getNumberInfo fetches from service and stores in dao`() = runTest(testScheduler) {
         val number = 42L
         fakeService.numberResponses[number] = NumberInfoDto(number = number, text = "Answer to Everything")
 
@@ -69,7 +60,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getRandomNumberInfo fetches random and stores in dao`() = runTest {
+    fun `getRandomNumberInfo fetches random and stores in dao`() = runTest(testScheduler) {
         val dto = NumberInfoDto(number = 7, text = "Lucky Seven")
         fakeService.randomResponse = dto
 
@@ -82,7 +73,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getNumbersHistory handles exception`() = runTest {
+    fun `getNumbersHistory handles exception`() = runTest(testScheduler) {
         fakeDao.shouldThrow = true
 
         val result = repository.getNumbersHistory().first()
@@ -91,7 +82,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getNumberInfo returns failure when service throws exception`() = runTest {
+    fun `getNumberInfo returns failure when service throws exception`() = runTest(testScheduler) {
         val number = 99L
 
         val result = repository.getNumberInfo(number)
@@ -101,7 +92,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getRandomNumberInfo calls service once`() = runTest {
+    fun `getRandomNumberInfo calls service once`() = runTest(testScheduler) {
         val dto = NumberInfoDto(number = 5, text = "Five")
         fakeService.randomResponse = dto
 
@@ -125,7 +116,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getNumbersHistory returns multiple saved items`() = runTest {
+    fun `getNumbersHistory returns multiple saved items`() = runTest(testScheduler) {
         val domain1 = NumberInfo(1, "One", 1)
         val domain2 = NumberInfo(2, "Two", 2)
         fakeDao.insertNumberInfo(domain1.toEntity())
@@ -138,7 +129,7 @@ class NumberRepositoryImplTest {
     }
 
     @Test
-    fun `getNumberInfo rethrows CancellationException`() = runTest {
+    fun `getNumberInfo rethrows CancellationException`() = runTest(testScheduler) {
         val cancellingService = object : NumberService {
             override suspend fun getNumberInfo(number: Long): NumberInfoDto {
                 throw CancellationException("Test cancellation")
