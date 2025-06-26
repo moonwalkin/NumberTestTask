@@ -11,31 +11,36 @@ import com.moonwalkin.numbertesttask.di.IoDispatcher
 import com.moonwalkin.numbertesttask.domain.NumberInfo
 import com.moonwalkin.numbertesttask.domain.NumberRepository
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.runCatching
 
-class NumberRepositoryImpl(
+class NumberRepositoryImpl @Inject constructor(
     private val numberDao: NumberDao,
     private val numberService: NumberService,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : NumberRepository {
 
-    override suspend fun getNumbersHistory(): Result<List<NumberInfo>> {
-        return runCatching {
-            withContext(dispatcher) {
-                numberDao.getSearchHistory().map(NumberInfoEntity::toDomain)
+    override fun getNumbersHistory(): Flow<Result<List<NumberInfo>>> {
+        return numberDao.getSearchHistory()
+            .map { entities ->
+                Result.success(entities.map(NumberInfoEntity::toDomain))
             }
-        }
+            .catch {
+                Result.failure<Exception>(it)
+            }
     }
 
-    override suspend fun getNumberInfo(number: Int): Result<NumberInfo> {
+    override suspend fun getNumberInfo(number: Long): Result<NumberInfo> {
         return runCatching {
             withContext(dispatcher) {
-                val cachedEntity = numberDao.getNumberInfo(number)
-                val numberInfo =
-                    cachedEntity?.toDomain() ?: numberService.getNumberInfo(number).toDomain()
-                numberDao.insertNumberInfo(numberInfo.toEntity())
-                numberInfo
+                numberService.getNumberInfo(number).toDomain()
+                    .also {
+                        numberDao.insertNumberInfo(it.toEntity())
+                    }
             }
         }
     }

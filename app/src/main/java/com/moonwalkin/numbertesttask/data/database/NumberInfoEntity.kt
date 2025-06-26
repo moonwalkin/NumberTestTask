@@ -7,20 +7,22 @@ import com.moonwalkin.numbertesttask.domain.NumberInfo
 @Entity(tableName = "numberInfo")
 class NumberInfoEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
     val text: String,
-    val number: Int
+    val number: Long
 )
 
 fun NumberInfoEntity.toDomain(): NumberInfo {
     return NumberInfo(
         text = text,
-        number = number
+        number = number,
+        id = id
     )
 }
 
 fun NumberInfo.toEntity(): NumberInfoEntity {
     return NumberInfoEntity(
+        id = id,
         text = text,
         number = number
     )

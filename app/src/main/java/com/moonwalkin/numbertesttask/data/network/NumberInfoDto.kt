@@ -6,13 +6,14 @@ import com.squareup.moshi.Json
 
 class NumberInfoDto(
     @Json(name = "text") val text: String,
-    @Json(name = "number") val number: Int
+    @Json(name = "number") val number: Long
 )
 
 fun NumberInfoDto.toDomain(): NumberInfo {
     return NumberInfo(
         text = text,
-        number = number
+        number = number,
+        id = 0L
     )
 }
 

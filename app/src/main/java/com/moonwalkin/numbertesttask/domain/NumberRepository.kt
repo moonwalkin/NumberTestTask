@@ -1,7 +1,9 @@
 package com.moonwalkin.numbertesttask.domain
 
+import kotlinx.coroutines.flow.Flow
+
 interface NumberRepository {
-    suspend fun getNumbersHistory(): Result<List<NumberInfo>>
-    suspend fun getNumberInfo(number: Int): Result<NumberInfo>
+    fun getNumbersHistory(): Flow<Result<List<NumberInfo>>>
+    suspend fun getNumberInfo(number: Long): Result<NumberInfo>
     suspend fun getRandomNumberInfo(): Result<NumberInfo>
 }

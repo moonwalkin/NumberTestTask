@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.moshi.kotlin)
     implementation(libs.moshi.converter)
+    implementation(libs.hilt.navigation.compose)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
 
