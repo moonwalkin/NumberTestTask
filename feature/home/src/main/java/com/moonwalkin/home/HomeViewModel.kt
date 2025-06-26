@@ -1,12 +1,12 @@
-package com.moonwalkin.numbertesttask.presentation.home
+package com.moonwalkin.home
 
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.moonwalkin.numbertesttask.domain.GetNumberInfoUseCase
-import com.moonwalkin.numbertesttask.domain.GetNumbersHistoryUseCase
-import com.moonwalkin.numbertesttask.domain.GetRandomNumberUseCase
-import com.moonwalkin.numbertesttask.domain.NumberInfo
+import com.moonwalkin.domain.GetNumberInfoUseCase
+import com.moonwalkin.domain.GetNumbersHistoryUseCase
+import com.moonwalkin.domain.GetRandomNumberUseCase
+import com.moonwalkin.domain.NumberInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

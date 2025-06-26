@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask.presentation.home
+package com.moonwalkin.home
 
 import android.widget.Toast
 import androidx.compose.foundation.clickable
@@ -33,7 +33,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.moonwalkin.numbertesttask.R
 
 @Composable
 fun HomeScreen(
