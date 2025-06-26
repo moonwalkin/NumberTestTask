@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                         if (isOffline) {
                             snackbarHostState.showSnackbar(
                                 message = notConnectedMessage,
-                                duration = SnackbarDuration.Long
+                                duration = SnackbarDuration.Indefinite
                             )
                         }
                     }
