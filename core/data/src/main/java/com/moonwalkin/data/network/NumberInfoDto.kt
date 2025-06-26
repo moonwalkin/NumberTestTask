@@ -1,7 +1,7 @@
-package com.moonwalkin.numbertesttask.data.network
+package com.moonwalkin.data.network
 
-import com.moonwalkin.numbertesttask.data.database.NumberInfoEntity
-import com.moonwalkin.numbertesttask.domain.NumberInfo
+import com.moonwalkin.data.database.NumberInfoEntity
+import com.moonwalkin.domain.NumberInfo
 import com.squareup.moshi.Json
 
 data class NumberInfoDto(

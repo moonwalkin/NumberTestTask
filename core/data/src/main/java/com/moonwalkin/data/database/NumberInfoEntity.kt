@@ -1,8 +1,8 @@
-package com.moonwalkin.numbertesttask.data.database
+package com.moonwalkin.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.moonwalkin.numbertesttask.domain.NumberInfo
+import com.moonwalkin.domain.NumberInfo
 
 @Entity(tableName = "numberInfo")
 data class NumberInfoEntity(

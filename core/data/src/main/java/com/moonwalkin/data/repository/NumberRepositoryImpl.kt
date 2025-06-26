@@ -1,21 +1,21 @@
-package com.moonwalkin.numbertesttask.data.repository
+package com.moonwalkin.data.repository
 
-import com.moonwalkin.numbertesttask.data.database.NumberDao
-import com.moonwalkin.numbertesttask.data.database.NumberInfoEntity
-import com.moonwalkin.numbertesttask.data.database.toDomain
-import com.moonwalkin.numbertesttask.data.database.toEntity
-import com.moonwalkin.numbertesttask.data.network.NumberService
-import com.moonwalkin.numbertesttask.data.network.toDomain
-import com.moonwalkin.numbertesttask.data.network.toEntity
-import com.moonwalkin.numbertesttask.di.IoDispatcher
-import com.moonwalkin.numbertesttask.domain.NumberInfo
-import com.moonwalkin.numbertesttask.domain.NumberRepository
+import com.moonwalkin.data.database.NumberDao
+import com.moonwalkin.data.database.NumberInfoEntity
+import com.moonwalkin.data.database.toDomain
+import com.moonwalkin.data.database.toEntity
+import com.moonwalkin.data.network.NumberService
+import com.moonwalkin.data.network.toDomain
+import com.moonwalkin.data.network.toEntity
+import com.moonwalkin.domain.IoDispatcher
+import com.moonwalkin.domain.NumberInfo
+import com.moonwalkin.domain.NumberRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 class NumberRepositoryImpl @Inject constructor(

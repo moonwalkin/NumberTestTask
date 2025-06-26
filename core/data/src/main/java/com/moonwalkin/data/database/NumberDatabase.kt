@@ -1,4 +1,4 @@
-package com.moonwalkin.numbertesttask.data.database
+package com.moonwalkin.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
