@@ -11,6 +11,7 @@ import com.moonwalkin.numbertesttask.domain.NumberRepository
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.fail
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -21,6 +22,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import java.util.concurrent.CancellationException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NumberRepositoryImplTest {
@@ -133,5 +135,27 @@ class NumberRepositoryImplTest {
 
         assertTrue(result.isSuccess)
         assertEquals(listOf(domain1, domain2), result.getOrNull())
+    }
+
+    @Test
+    fun `getNumberInfo rethrows CancellationException`() = runTest {
+        val cancellingService = object : NumberService {
+            override suspend fun getNumberInfo(number: Long): NumberInfoDto {
+                throw CancellationException("Test cancellation")
+            }
+
+            override suspend fun getRandomNumberInfo(): NumberInfoDto {
+                error("Should not be called")
+            }
+        }
+
+        repository = NumberRepositoryImpl(fakeDao, cancellingService, testDispatcher)
+
+        try {
+            repository.getNumberInfo(123)
+            fail("Expected CancellationException to be thrown")
+        } catch (e: CancellationException) {
+            assertEquals("Test cancellation", e.message)
+        }
     }
 }
