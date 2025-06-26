@@ -2,13 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.serialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
     namespace = "com.moonwalkin.numbertesttask"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
+        buildConfigField("String", "BASE_URL", "\"http://numbersapi.com/\"")
         applicationId = "com.moonwalkin.numbertesttask"
         minSdk = 24
         targetSdk = 34
@@ -36,10 +40,23 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(libs.retrofit)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.okhttp.logging)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.android)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi.converter)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.kotlinx.coroutines.test)
+    ksp(libs.room.compiler)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

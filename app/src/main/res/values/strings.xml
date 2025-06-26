@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NumberTestTask</string>
+    <string name="enter_number">Enter number</string>
+    <string name="get_fact_about_random_number">Get fact about random number</string>
+    <string name="get_fact">Get fact</string>
+    <string name="not_connected">⚠️ You aren’t connected to the internet</string>
+    <string name="number">Number: %1$s</string>
 </resources>
