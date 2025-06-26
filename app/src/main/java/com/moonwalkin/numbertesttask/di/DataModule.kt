@@ -13,6 +13,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
@@ -42,4 +44,17 @@ class DataModule {
             .build()
             .create(NumberService::class.java)
     }
+
+    @Provides
+    @DefaultDispatcher
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    @IoDispatcher
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @MainDispatcher
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
 }
