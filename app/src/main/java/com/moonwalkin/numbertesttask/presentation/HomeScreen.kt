@@ -34,11 +34,14 @@ import com.moonwalkin.numbertesttask.R
 
 @Composable
 fun HomeScreen(
+    isOffline: Boolean,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
     HomeScreenContent(
+        isOffline = isOffline,
         modifier = modifier.padding(horizontal = 16.dp),
         onGetFactClick = viewModel::loadNumberInfo,
         onRandomFactClick = viewModel::getRandomNumberInfo,
@@ -49,6 +52,7 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     state: HomeViewModel.HomeScreenState,
+    isOffline: Boolean,
     onGetFactClick: (Long) -> Unit,
     onRandomFactClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -79,14 +83,16 @@ private fun HomeScreenContent(
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = { onGetFactClick(text.toLongOrNull() ?: 0) },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isOffline
             ) {
                 Text(text = stringResource(R.string.get_fact))
             }
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 onClick = onRandomFactClick,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !isOffline
             ) {
                 Text(text = stringResource(R.string.get_fact_about_random_number))
             }
