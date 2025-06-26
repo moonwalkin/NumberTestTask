@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moonwalkin.numbertesttask.R
+import com.moonwalkin.numbertesttask.navigation.Navigation
 import com.moonwalkin.numbertesttask.ui.theme.NumberTestTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    HomeScreen(
+                    Navigation(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding),

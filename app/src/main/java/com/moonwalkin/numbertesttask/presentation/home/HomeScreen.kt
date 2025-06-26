@@ -1,6 +1,7 @@
 package com.moonwalkin.numbertesttask.presentation.home
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,6 +38,7 @@ import com.moonwalkin.numbertesttask.R
 @Composable
 fun HomeScreen(
     isOffline: Boolean,
+    openDetails: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -47,7 +49,8 @@ fun HomeScreen(
         modifier = modifier.padding(horizontal = 16.dp),
         onGetFactClick = viewModel::loadNumberInfo,
         onRandomFactClick = viewModel::getRandomNumberInfo,
-        state = state
+        state = state,
+        openDetails = openDetails
     )
 }
 
@@ -57,6 +60,7 @@ private fun HomeScreenContent(
     isOffline: Boolean,
     onGetFactClick: (Long) -> Unit,
     onRandomFactClick: () -> Unit,
+    openDetails: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -105,7 +109,7 @@ private fun HomeScreenContent(
             ) {
                 Text(text = stringResource(R.string.get_fact_about_random_number))
             }
-            HistoryItems(listState, state)
+            HistoryItems(listState, state, openDetails)
         }
         if (state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -117,13 +121,16 @@ private fun HomeScreenContent(
 private fun HistoryItems(
     lazyListState: LazyListState,
     state: HomeViewModel.HomeScreenState,
+    openDetails: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier, state = lazyListState, contentPadding = PaddingValues(8.dp)) {
         items(items = state.history, key = { it.id }) { numberInfo ->
             Text(
                 text = "${numberInfo.number} — ${numberInfo.text}",
-                modifier = Modifier.padding(vertical = 4.dp),
+                modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .clickable { openDetails(numberInfo.number, numberInfo.text) },
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
