@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.runCatching
+import kotlin.coroutines.cancellation.CancellationException
 
 class NumberRepositoryImpl @Inject constructor(
     private val numberDao: NumberDao,
@@ -35,8 +35,8 @@ class NumberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNumberInfo(number: Long): Result<NumberInfo> {
-        return runCatching {
-            withContext(dispatcher) {
+        return withContext(dispatcher) {
+            safeCall {
                 numberService.getNumberInfo(number).toDomain()
                     .also {
                         numberDao.insertNumberInfo(it.toEntity())
@@ -46,12 +46,22 @@ class NumberRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRandomNumberInfo(): Result<NumberInfo> {
-        return runCatching {
-            withContext(dispatcher) {
+        return withContext(dispatcher) {
+            safeCall {
                 numberService.getRandomNumberInfo()
                     .also { numberDao.insertNumberInfo(it.toEntity()) }
                     .toDomain()
             }
+        }
+    }
+
+    private inline fun <T> safeCall(block: () -> T): Result<T> {
+        return try {
+            Result.success(block())
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 }
