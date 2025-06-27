@@ -11,20 +11,20 @@ import junit.framework.TestCase.assertNull
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest {
 
-    @get:Rule
-    val dispatcherRule = MainDispatcherRule()
-
     private lateinit var fakeRepository: FakeNumberRepository
     private lateinit var viewModel: HomeViewModel
+    private val testScheduler = TestCoroutineScheduler()
+    private val testDispatcher = StandardTestDispatcher(testScheduler)
 
     @Before
     fun setup() {
@@ -32,14 +32,15 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `initial state loads history successfully`() = runTest {
+    fun `initial state loads history successfully`() = runTest(testDispatcher) {
         val history = listOf(NumberInfo(1, "One", 1), NumberInfo(2, "Two", 2))
         fakeRepository.historyFlow = flowOf(Result.success(history))
 
         viewModel = HomeViewModel(
             GetNumberInfoUseCase(fakeRepository),
             GetRandomNumberUseCase(fakeRepository),
-            GetNumbersHistoryUseCase(fakeRepository)
+            GetNumbersHistoryUseCase(fakeRepository),
+            testDispatcher
         )
 
         advanceUntilIdle()
@@ -50,13 +51,14 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `initial state sets error when history fails`() = runTest {
+    fun `initial state sets error when history fails`() = runTest(testDispatcher) {
         fakeRepository.historyFlow = flowOf(Result.failure(RuntimeException("DB error")))
 
         viewModel = HomeViewModel(
             GetNumberInfoUseCase(fakeRepository),
             GetRandomNumberUseCase(fakeRepository),
-            GetNumbersHistoryUseCase(fakeRepository)
+            GetNumbersHistoryUseCase(fakeRepository),
+            testDispatcher
         )
 
         advanceUntilIdle()
@@ -67,7 +69,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `loadNumberInfo updates state on success`() = runTest {
+    fun `loadNumberInfo updates state on success`() = runTest(testDispatcher) {
         val info = NumberInfo(id = 0, number = 5, text = "Five")
         fakeRepository.historyFlow = flowOf(Result.success(emptyList()))
         fakeRepository.infoResult = Result.success(info)
@@ -75,7 +77,8 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             GetNumberInfoUseCase(fakeRepository),
             GetRandomNumberUseCase(fakeRepository),
-            GetNumbersHistoryUseCase(fakeRepository)
+            GetNumbersHistoryUseCase(fakeRepository),
+            testDispatcher
         )
 
         viewModel.loadNumberInfo(5)
@@ -88,14 +91,15 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `loadNumberInfo updates error on failure`() = runTest {
+    fun `loadNumberInfo updates error on failure`() = runTest(testDispatcher) {
         fakeRepository.historyFlow = flowOf(Result.success(emptyList()))
         fakeRepository.infoResult = Result.failure(RuntimeException("Network error"))
 
         viewModel = HomeViewModel(
             GetNumberInfoUseCase(fakeRepository),
             GetRandomNumberUseCase(fakeRepository),
-            GetNumbersHistoryUseCase(fakeRepository)
+            GetNumbersHistoryUseCase(fakeRepository),
+            testDispatcher
         )
 
         viewModel.loadNumberInfo(10)
@@ -107,7 +111,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `getRandomNumberInfo sets random number info`() = runTest {
+    fun `getRandomNumberInfo sets random number info`() = runTest(testDispatcher) {
         val randomInfo = NumberInfo(id = 0, number = 7, text = "Lucky Seven")
         fakeRepository.historyFlow = flowOf(Result.success(emptyList()))
         fakeRepository.randomResult = Result.success(randomInfo)
@@ -115,7 +119,8 @@ class HomeViewModelTest {
         viewModel = HomeViewModel(
             GetNumberInfoUseCase(fakeRepository),
             GetRandomNumberUseCase(fakeRepository),
-            GetNumbersHistoryUseCase(fakeRepository)
+            GetNumbersHistoryUseCase(fakeRepository),
+            testDispatcher
         )
 
         viewModel.getRandomNumberInfo()

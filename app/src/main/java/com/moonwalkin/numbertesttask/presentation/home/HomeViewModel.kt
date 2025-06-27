@@ -3,11 +3,13 @@ package com.moonwalkin.numbertesttask.presentation.home
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.moonwalkin.numbertesttask.di.MainDispatcher
 import com.moonwalkin.numbertesttask.domain.GetNumberInfoUseCase
 import com.moonwalkin.numbertesttask.domain.GetNumbersHistoryUseCase
 import com.moonwalkin.numbertesttask.domain.GetRandomNumberUseCase
 import com.moonwalkin.numbertesttask.domain.NumberInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,13 +21,14 @@ class HomeViewModel @Inject constructor(
     private val getNumberInfoUseCase: GetNumberInfoUseCase,
     private val getRandomNumberUseCase: GetRandomNumberUseCase,
     getNumbersHistoryUseCase: GetNumbersHistoryUseCase,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HomeScreenState())
     val state = _state.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(mainDispatcher) {
             getNumbersHistoryUseCase().collect { history ->
                 _state.update { state ->
                     history
@@ -37,7 +40,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun loadNumberInfo(number: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(mainDispatcher) {
             loadNumberInfo {
                 getNumberInfoUseCase(number)
             }
@@ -45,7 +48,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getRandomNumberInfo() {
-        viewModelScope.launch {
+        viewModelScope.launch(mainDispatcher) {
             loadNumberInfo {
                 getRandomNumberUseCase()
             }
