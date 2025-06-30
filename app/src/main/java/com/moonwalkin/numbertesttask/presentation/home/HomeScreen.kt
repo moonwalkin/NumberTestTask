@@ -1,5 +1,6 @@
 package com.moonwalkin.numbertesttask.presentation.home
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -64,10 +65,14 @@ private fun HomeScreenContent(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    var text by rememberSaveable { mutableStateOf("") }
+    var text by rememberSaveable {
+        Log.d("TAG", "called")
+        mutableStateOf("")
+    }
     val listState = rememberLazyListState()
 
     LaunchedEffect(state.error) {
+        Log.d("TAG", "launched")
         if (state.error != null) {
             Toast.makeText(
                 context,

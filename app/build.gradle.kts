@@ -55,9 +55,11 @@ dependencies {
     implementation(libs.moshi.converter)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.kotlinx.coroutines.test)
+    implementation(libs.core.ktx)
+    implementation(libs.androidx.junit.ktx)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
-
+    androidTestImplementation(libs.androidx.test.runner)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
