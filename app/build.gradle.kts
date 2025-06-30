@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.core.ktx)
     implementation(libs.androidx.junit.ktx)
+    implementation(libs.decompose)
+    implementation(libs.decompose.extensions.compose)
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)
     androidTestImplementation(libs.androidx.test.runner)

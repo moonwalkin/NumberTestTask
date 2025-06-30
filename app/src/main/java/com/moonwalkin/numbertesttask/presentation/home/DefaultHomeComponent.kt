@@ -1,36 +1,47 @@
 package com.moonwalkin.numbertesttask.presentation.home
 
 import androidx.compose.runtime.Immutable
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.decompose.value.update
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.moonwalkin.numbertesttask.di.MainDispatcher
 import com.moonwalkin.numbertesttask.domain.GetNumberInfoUseCase
 import com.moonwalkin.numbertesttask.domain.GetNumbersHistoryUseCase
 import com.moonwalkin.numbertesttask.domain.GetRandomNumberUseCase
 import com.moonwalkin.numbertesttask.domain.NumberInfo
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class DefaultHomeComponent @AssistedInject constructor(
+    @Assisted("componentContext") private val componentContext: ComponentContext,
     private val getNumberInfoUseCase: GetNumberInfoUseCase,
     private val getRandomNumberUseCase: GetRandomNumberUseCase,
     getNumbersHistoryUseCase: GetNumbersHistoryUseCase,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
-) : ViewModel() {
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    @Assisted("onItemClicked") private val onItemClicked: (Long, String) -> Unit
+) : HomeComponent {
 
-    private val _state = MutableStateFlow(HomeScreenState())
-    val state = _state.asStateFlow()
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+
+    private val _model = MutableValue(HomeScreenState())
+    override val model: Value<HomeScreenState> = _model
 
     init {
-        viewModelScope.launch(mainDispatcher) {
+        componentContext.lifecycle.doOnDestroy {
+            scope.cancel()
+        }
+        scope.launch(mainDispatcher) {
             getNumbersHistoryUseCase().collect { history ->
-                _state.update { state ->
+                _model.update { state ->
                     history
                         .map { state.copy(history = it, error = null) }
                         .getOrElse { state.copy(error = it.message) }
@@ -39,29 +50,33 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun loadNumberInfo(number: Long) {
-        viewModelScope.launch(mainDispatcher) {
+    override fun loadNumberInfo(number: Long) {
+        scope.launch(mainDispatcher) {
             loadNumberInfo {
                 getNumberInfoUseCase(number)
             }
         }
     }
 
-    fun getRandomNumberInfo() {
-        viewModelScope.launch(mainDispatcher) {
+    override fun loadRandomNumberInfo() {
+        scope.launch(mainDispatcher) {
             loadNumberInfo {
                 getRandomNumberUseCase()
             }
         }
     }
 
+    override fun onItemSelected(number: Long, text: String) {
+        onItemClicked(number, text)
+    }
+
     private suspend fun loadNumberInfo(action: suspend () -> Result<NumberInfo>) {
-        _state.update { state ->
+        _model.update { state ->
             state.copy(isLoading = true, error = null)
         }
         action()
             .onSuccess { numberInfo ->
-                _state.update { state ->
+                _model.update { state ->
                     state.copy(
                         numberInfo = numberInfo.text,
                         isLoading = false,
@@ -70,7 +85,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
             .onFailure { error ->
-                _state.update { state ->
+                _model.update { state ->
                     state.copy(
                         isLoading = false,
                         error = error.message
@@ -79,6 +94,7 @@ class HomeViewModel @Inject constructor(
             }
     }
 
+
     @Immutable
     data class HomeScreenState(
         val numberInfo: String = "",
@@ -86,4 +102,12 @@ class HomeViewModel @Inject constructor(
         val isLoading: Boolean = false,
         val error: String? = null
     )
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+            @Assisted("onItemClicked") onItemSelected: (Long, String) -> Unit
+        ): DefaultHomeComponent
+    }
 }

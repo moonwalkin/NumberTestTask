@@ -16,8 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arkivanov.decompose.defaultComponentContext
 import com.moonwalkin.numbertesttask.R
-import com.moonwalkin.numbertesttask.navigation.Navigation
+import com.moonwalkin.numbertesttask.presentation.root.DefaultRootComponent
+import com.moonwalkin.numbertesttask.presentation.root.RootContent
 import com.moonwalkin.numbertesttask.ui.theme.NumberTestTaskTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -28,8 +30,14 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
+    @Inject
+    lateinit var rootComponent: DefaultRootComponent.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val component = rootComponent.create(defaultComponentContext())
+
         enableEdgeToEdge()
         setContent {
             val snackbarHostState = remember { SnackbarHostState() }
@@ -53,12 +61,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                     }
-
-                    Navigation(
+                    RootContent(
+                        component = component,
+                        isOffline = isOffline,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding),
-                        isOffline = isOffline
+                            .padding(innerPadding)
                     )
                 }
             }

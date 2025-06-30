@@ -1,6 +1,5 @@
 package com.moonwalkin.numbertesttask.presentation.home
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -32,32 +31,30 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.moonwalkin.numbertesttask.R
 
 @Composable
 fun HomeScreen(
     isOffline: Boolean,
-    openDetails: (Long, String) -> Unit,
+    component: HomeComponent,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by component.model.subscribeAsState()
 
     HomeScreenContent(
         isOffline = isOffline,
         modifier = modifier.padding(horizontal = 16.dp),
-        onGetFactClick = viewModel::loadNumberInfo,
-        onRandomFactClick = viewModel::getRandomNumberInfo,
+        onGetFactClick = component::loadNumberInfo,
+        onRandomFactClick = component::loadRandomNumberInfo,
         state = state,
-        openDetails = openDetails
+        openDetails = component::onItemSelected
     )
 }
 
 @Composable
 private fun HomeScreenContent(
-    state: HomeViewModel.HomeScreenState,
+    state: DefaultHomeComponent.HomeScreenState,
     isOffline: Boolean,
     onGetFactClick: (Long) -> Unit,
     onRandomFactClick: () -> Unit,
@@ -66,13 +63,11 @@ private fun HomeScreenContent(
 ) {
     val context = LocalContext.current
     var text by rememberSaveable {
-        Log.d("TAG", "called")
         mutableStateOf("")
     }
     val listState = rememberLazyListState()
 
     LaunchedEffect(state.error) {
-        Log.d("TAG", "launched")
         if (state.error != null) {
             Toast.makeText(
                 context,
@@ -125,7 +120,7 @@ private fun HomeScreenContent(
 @Composable
 private fun HistoryItems(
     lazyListState: LazyListState,
-    state: HomeViewModel.HomeScreenState,
+    state: DefaultHomeComponent.HomeScreenState,
     openDetails: (Long, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
